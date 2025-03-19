@@ -1,28 +1,78 @@
-# Roadmap 🗺️
-> Roteiro do Projeto
+# Roteiro: Modificar um Arquivo .docx com Dados Extraídos de Arquivos XML
 
-*This roadmap will guide you through the development and improvement stages of the NFC-Manager project.*
->#### Este roteiro irá guiá-lo pelas etapas de desenvolvimento e melhorias do projeto NFC-Manager.
+Este roteiro fornece as etapas detalhadas para ler um arquivo XML e atualizar um arquivo `.docx` existente com as informações extraídas.
 
----
+## Pré-requisitos
+1. Instale o Python (versão 3.7 ou superior).
+2. Instale as bibliotecas necessárias:
+    ```bash
+    pip install lxml python-docx
+    ```
 
-## 1. **Understanding Requirements**
->## 1. **Compreendendo os Requisitos**
-- *Analyze the needs of employees and how they interact with ".xml" files.*
->#### - Analisar as necessidades dos funcionários e como eles interagem com os arquivos ".xml".
-- *Define the project's objectives clearly and concisely.*
->#### - Definir os objetivos do projeto de forma clara e concisa.
+## Etapas do Projeto
 
----
+### 1. Ler e Analisar o Arquivo XML
+1. Importe a biblioteca `lxml` para manipular o XML:
+    ```python
+    from lxml import etree
+    ```
+2. Abra e leia o arquivo XML:
+    ```python
+    with open('arquivo.xml', 'r', encoding='utf-8') as file:
+        xml_data = file.read()
 
-## 2. **Development Phase**
->## 2. **Fase de Desenvolvimento**
-- *Create Python scripts to read ".xml" files and process their content.*
->#### - Criar scripts em Python para ler arquivos ".xml" e processar o conteúdo deles.
-- *Implement the functionality to modify or generate ".docx" files.*
->#### - Implementar a funcionalidade de modificar ou gerar arquivos ".docx".
+    root = etree.fromstring(xml_data)
+    ```
 
-### Example:
+3. Extraia os dados necessários utilizando XPath:
+    ```python
+    # Exemplo: buscando todos os elementos <item>
+    items = root.xpath('//item')
+    dados_extraidos = [item.text for item in items]
+    ```
+
+### 2. Modificar o Arquivo .docx Existente
+1. Importe a biblioteca `python-docx`:
+    ```python
+    from docx import Document
+    ```
+
+2. Abra o arquivo `.docx` existente:
+    ```python
+    doc = Document('arquivo_existente.docx')
+    ```
+
+3. Adicione um título ou uma seção específica com os novos dados:
+    ```python
+    doc.add_heading('Dados Atualizados do XML', level=2)
+    for dado in dados_extraidos:
+        doc.add_paragraph(dado)
+    ```
+
+4. (Opcional) Identifique uma posição específica no documento para inserir o conteúdo:
+    ```python
+    # Exemplo: Adicionar após o primeiro parágrafo
+    primeiro_paragrafo = doc.paragraphs[0]
+    primeiro_paragrafo.add_run('\n\nDados do XML adicionados abaixo:')
+    for dado in dados_extraidos:
+        primeiro_paragrafo.add_run(f'\n{dado}')
+    ```
+
+### 3. Salvar as Modificações no Arquivo .docx
+1. Salve o arquivo atualizado:
+    ```python
+    doc.save('arquivo_atualizado.docx')
+    ```
+
+### 4. Testar o Código
+1. Execute o script completo e abra o arquivo `.docx` atualizado:
+    ```bash
+    python seu_script.py
+    ```
+
+2. Verifique se os dados foram inseridos no local desejado.
+
+## Exemplo Completo de Código
 ```python
 from lxml import etree
 from docx import Document
@@ -34,41 +84,14 @@ with open('arquivo.xml', 'r', encoding='utf-8') as file:
 root = etree.fromstring(xml_data)
 dados_extraidos = [item.text for item in root.xpath('//item')]
 
-# Abrir ou criar o arquivo .docx
+# Abrir o arquivo .docx existente
 doc = Document('arquivo_existente.docx')
 
-# Adicionar dados do XML no documento
-doc.add_heading('Dados Extraídos do XML', level=2)
+# Adicionar uma nova seção com os dados do XML
+doc.add_heading('Dados Atualizados do XML', level=2)
 for dado in dados_extraidos:
     doc.add_paragraph(dado)
 
-# Salvar o arquivo atualizado
+# Salvar o arquivo modificado
 doc.save('arquivo_atualizado.docx')
-```
-
-### **Step 3: Running the Code**
->### **Passo 3: Executando o Código**
-- *Run the Python script to process the XML data and update the .docx file.*
->#### - Execute o script Python para processar os dados do XML e atualizar o arquivo .docx.
-
-#### Example:
-```bash
-python seu_script.py
-```
-
-### **Step 4: Verifying the Document**
->### Passo 4: Verificando o Documento
-
-Open the updated document (.docx) to confirm the information was added correctly. >#### - Abra o documento atualizado (.docx) para confirmar que as informações foram adicionadas corretamente.
-
-### **Step 5: Collecting Feedback**
->### Passo 5: Coletando Feedback
-
-Share the tool with the employees and gather feedback to improve it. >#### - Compartilhe a ferramenta com os funcionários e colete feedback para melhorá-la.
-
-### **Step 6: Continuous Improvement**
->### Passo 6: Melhoria Contínua
-
-Use the feedback to update the code and enhance usability. >#### - Use o feedback para atualizar o código e melhorar a usabilidade.
-
-Add new features, such as batch processing of XML files or improved formatting in the .docx document. >#### - Adicione novos recursos, como processamento em lote de arquivos XML ou formatação aprimorada no documento .docx.
+print("Arquivo .docx atualizado com sucesso!")
