@@ -21,7 +21,7 @@
 ### 🗂Repository Folder (NFC-manager)<br/>
 >#### 📂Nfc-manager(During the course, developed projects will be sent)<br/>                                          
 >>📁src [^1].<br/>
->>📂exp [^2].<br/>
+>>📂help [^2].<br/>
 >>📁img [^3].<br/>
 
 <br>
