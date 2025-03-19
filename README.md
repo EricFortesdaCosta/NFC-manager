@@ -14,8 +14,9 @@
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)&nbsp;
 
 > [!IMPORTANT]
-> **The tools do need to be the same to execute the projetc** <br>
-> As ferramentas precisam ser as mesmas para executar o projeto
+> **Click here [RoadMap](/help/anotação.md) for view the roadmap for project** <br>
+> Clique [ROTEIRO](/help/anotação.md) aqui para ver o roteiro do projeto.
+<hr>
 
 # Folder Organization 🗂
 ### 🗂Repository Folder (NFC-manager)<br/>
