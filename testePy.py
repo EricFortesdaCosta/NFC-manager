@@ -1,7 +1,7 @@
 import os
 from docx import Document
-
-file_path = r'Src/CertGarantia.docx'
+import os
+file_path = "Src/CertGarantia.docx"
 
 if os.path.exists(file_path):
     doc = Document(file_path)
