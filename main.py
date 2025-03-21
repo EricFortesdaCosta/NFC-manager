@@ -6,19 +6,24 @@ with open('Src/arquivo.xml', 'rb') as file:
 
 root = etree.fromstring(xml_data)
 
-items = root.xpath('//item')
-dados_estraidos = [item.text for item in items]
+namespaces = {'nfe': 'http://www.portalfiscal.inf.br/nfe'}
+# Definir namespaces e buscar dados do XML
+namespaces = {'nfe': 'http://www.portalfiscal.inf.br/nfe'}
+item_element = root.xpath('//nfe:ide/nfe:cNF', namespaces=namespaces)
+nNF_element = root.xpath('//nfe:ide/nfe:nNF', namespaces=namespaces)
+cProd_element = root.xpath('//nfe:prod/nfe:cProd', namespaces=namespaces)
+xProd_element = root.xpath('//nfe:prod/nfe:xProd', namespaces=namespaces)
 
-doc = Document(r'C:\Users\EricCosta\Documents\Projeto_Mercato\NFC-maneger\NFC-maneger\Src\CertGarantia.docx')
+# Extrair valores do XML
+item_value = item_element[0].text if item_element else "Valor não encontrado"
+nNF_value = nNF_element[0].text if nNF_element else "Valor não encontrado"
+cProd_value = cProd_element[0].text if cProd_element else "Valor não encontrado"
+xProd_value = xProd_element[0].text if xProd_element else "Valor não encontrado"
+doc = Document(r'C:\Users\EricCosta\Documents\Projeto_Mercato\NFC-maneger\NFC-maneger\Src\CertificadoConf.docx')
 
-
-doc.add_heading('Dados Atualizados do XML', level=2)
-for dado in dados_estraidos:
-    doc.add_paragraph(dado)
-
-primeiro_paragrafo = doc.paragraphs[0]
-primeiro_paragrafo.add_run('\n\nDados do XML adicionados Abaixo: ')
-for dado in dados_estraidos:
-    primeiro_paragrafo.add_run(f'\n{dado}')
+# Substituir ou adicionar o texto acima da tabela
+for paragraph in doc.paragraphs:
+    if "NF: N°" in paragraph.text:  # Localiza o parágrafo com "NF: N°"
+        paragraph.text = f"NF: N° {nNF_value}"  # Substitui pelo valor de <nNF>
 
 doc.save('arquivo_atualizado.docx')

@@ -1,0 +1,28 @@
+from lxml import etree
+from docx import Document
+
+# Carregar o XML
+with open('Src/arquivo.xml', 'rb') as file:
+    xml_data = file.read()
+
+root = etree.fromstring(xml_data)
+
+# Extraindo informações específicas do XML
+nfe_id = root.xpath("//infNFe/@Id")[0]  # ID da NF-e
+cnpj_emit = root.xpath("//emit/CNPJ")[0].text  # CNPJ do emissor
+nome_dest = root.xpath("//dest/xNome")[0].text  # Nome do destinatário
+valor_total = root.xpath("//total/ICMSTot/vNF")[0].text  # Valor total da NF-e
+
+# Criar o documento Word e adicionar os dados extraídos
+doc = Document()
+doc.add_heading('Dados Extraídos do XML', level=2)
+
+doc.add_paragraph(f"ID da NF-e: {nfe_id}")
+doc.add_paragraph(f"CNPJ do Emitente: {cnpj_emit}")
+doc.add_paragraph(f"Nome do Destinatário: {nome_dest}")
+doc.add_paragraph(f"Valor Total: R$ {valor_total}")
+
+# Salvar o arquivo Word atualizado
+doc.save('arquivo_atualizado.docx')
+
+print("Informações extraídas e salvas no arquivo 'arquivo_atualizado.docx'.")

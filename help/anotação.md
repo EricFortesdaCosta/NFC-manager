@@ -95,3 +95,10 @@ for dado in dados_extraidos:
 # Salvar o arquivo modificado
 doc.save('arquivo_atualizado.docx')
 print("Arquivo .docx atualizado com sucesso!")
+```
+# anotações do desenvolvedor
+
+>### **as instruções abaixo server para funcionar o scritp**
+> 1 - caso 
+
+
