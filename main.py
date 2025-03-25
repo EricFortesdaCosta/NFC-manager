@@ -1,10 +1,14 @@
 from lxml import etree # type: ignore
 from docx import Document # type: ignore
+from datetime import datetime
+
 
 with open('Src/arquivo.xml', 'rb') as file:
     xml_data = file.read()
 
 root = etree.fromstring(xml_data)
+selo_atual = input('Por favor, insira o número do selo atual: ')
+
 
 namespaces = {'nfe': 'http://www.portalfiscal.inf.br/nfe'}
 # Definir namespaces e buscar dados do XML
@@ -26,6 +30,10 @@ xProd_value = xProd_element[0].text if xProd_element else "Valor não encontrado
 ncm_value = ncm_elements[0].text if ncm_elements else "Valor não encontrado"
 qtrib_value = qtrib_elements[0].text if qtrib_elements else "Valor não encontrado"
 cfop_value = cfop_elements[0].text if cfop_elements else "Valor não encontrado"
+
+#Data
+
+data_hora_atual = datetime.now().strftime('%d/%m/%Y')
 
 
 doc = Document(r'C:\Users\EricCosta\Documents\Projeto_Mercato\NFC-maneger\Src\CertificadoConf.docx')
@@ -76,5 +84,20 @@ for table in doc.tables:
                 for item_row in table.rows[1:]:  # Evitar a linha de cabeçalho
                     item_row.cells[4].text = cfop_value
                     break  # Inserir apenas uma vez e sair
+
+##Atualizar Selo
+for paragraph in doc.paragraphs:
+    if "Selo" in paragraph.text:
+        for run in paragraph.runs:  # Modificar os runs para manter formatação
+            if "Selo" in run.text:
+                run.text = f"Selo Nº: {selo_atual}"
+
+#Atualizar data
+for paragraph in doc.paragraphs:
+    if "Canoas" in paragraph.text:
+        for run in paragraph.runs:  # Modificar os runs para manter formatação
+            if "Canoas" in run.text:
+                run.text = f"Canoas, {data_hora_atual}"
+
 
 doc.save('arquivo_atualizado.docx')
